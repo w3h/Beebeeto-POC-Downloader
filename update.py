@@ -30,7 +30,9 @@ def strip_tags(html):
     html = html.replace('&quot;', '"') 
     html = html.replace('&#39;', "'") 
     html = html.replace('&amp;', "&") 
-    return ''.join(html)
+    html = ''.join(html)
+    html = html[html.find('#!/'):]
+    return html
 
 
 def getHtml(url):
@@ -159,5 +161,5 @@ if __name__ == "__main__":
 
     main()
     #info = getPoc("poc-2014-0115")
-    #makeReadme('poc-2014-0115', info)
+    #savePoc('poc-2014-0115', info)
     #open('txt.html', 'w').write(str(info))
