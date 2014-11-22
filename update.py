@@ -8,6 +8,8 @@ import socket
 from utils.BeautifulSoup import BeautifulSoup
 import re
 import time
+import platform
+
 
 g_cookie = 'csrftoken=jLySq58kvH7DW23sxIUwkVPpsOMStUdX; sessionid=8g49ri43mn8fgmic41gd1nt9x1ati6v1; CNZZDATA1253290531=1433061732-1414286034-%7C1414824533'
 g_readme_head = ''' <html>
@@ -23,6 +25,17 @@ body {  FONT-FAMILY: verdana;  font-size: 10pt; color: #000000}
 <body bgcolor="#FFFFFF">     
 '''
 
+def isWindow():
+    return "Window" in platform.platform()
+
+
+def format_dos(info):
+    if not isWindow():
+        return info
+    else:
+        return str(info).decode("utf8").encode("gbk")
+
+
 def strip_tags(html):
     html = html.replace('&nbsp;', ' ')  
     html = html.replace('&gt;', '>')  
@@ -32,7 +45,8 @@ def strip_tags(html):
     html = html.replace('&amp;', "&") 
     html = ''.join(html)
     html = html[html.find('#!/'):]
-    return html
+
+    return format_dos(html)
 
 
 def getHtml(url):
@@ -95,7 +109,7 @@ def savePoc(name, info):
     if os.path.exists(sname):
         return
 
-    with open(sname, "w") as fp:
+    with open(sname, "wb") as fp:
         fp.write(str(info))
 
     makeReadme(name, info)
@@ -146,7 +160,6 @@ def main():
             info = getPoc(t)
             if info == "": continue
             savePoc(t, info)
-            #makeReadme(t, info)
             sum = sum + 1
 
     print "[*] The total number of POC is %d " % sum
